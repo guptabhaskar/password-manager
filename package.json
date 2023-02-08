@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "boilerplate-nextjs-auth0-eslint-prettier-tailwindcss",
+  "name": "password-manager",
   "scripts": {
     "dev": "next",
     "build": "next build",
