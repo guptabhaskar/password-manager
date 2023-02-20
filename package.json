@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "password-manager",
+  "name": "safe-keep",
   "scripts": {
     "dev": "next",
     "build": "next build",
