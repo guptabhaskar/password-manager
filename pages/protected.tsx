@@ -16,7 +16,6 @@ export default function ProtectedPage() {
         setContent(json.content);
       }
     };
-    console.log("HERE");
     fetchData();
   }, [session]);
 
