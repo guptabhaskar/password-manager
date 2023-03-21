@@ -2,8 +2,11 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import Auth0Provider from "next-auth/providers/auth0";
 import SequelizeAdapter from "@next-auth/sequelize-adapter";
 import { Sequelize } from "sequelize";
+import pg from "pg";
 
-const sequelize = new Sequelize(process.env.DATABASE_URL);
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialectModule: pg,
+});
 
 // Calling sync() is not recommended in production
 sequelize.sync();
