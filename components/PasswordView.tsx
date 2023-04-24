@@ -14,15 +14,16 @@ function PasswordView() {
   return (
     <>
       <button
-        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded"
+        className="bg-transparent text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded"
         onClick={handleOpenForm}
       >
-        Open Form
+        Add Password
       </button>
       <div
         className={`fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center ${
           isFormOpen ? "" : "hidden"
         }`}
+        onClick={handleCloseForm}
       >
         <form
           className="bg-white p-8 rounded-lg shadow-md"
@@ -32,14 +33,16 @@ function PasswordView() {
             width: "90%",
             height: "52%",
           }}
+          onClick={(e) => {
+            // do not close modal if anything inside modal content is clicked
+            e.stopPropagation();
+          }}
         >
           <h2 className="text-lg font-semibold mb-4 text-center">
-            Password View
+            Add Password
           </h2>
           <div className="mb-4">
-            <label className="block font-semibold mb-2" htmlFor="email">
-              Website
-            </label>
+            <label className="block font-semibold mb-2">Website</label>
             <input
               className="border border-gray-400 p-2 w-full rounded"
               type="text"
@@ -48,9 +51,7 @@ function PasswordView() {
             />
           </div>
           <div className="mb-4">
-            <label className="block font-semibold mb-2" htmlFor="email">
-              Username
-            </label>
+            <label className="block font-semibold mb-2">Username</label>
             <input
               className="border border-gray-400 p-2 w-full rounded"
               type="text"
@@ -59,12 +60,10 @@ function PasswordView() {
             />
           </div>
           <div className="mb-4">
-            <label className="block font-semibold mb-2" htmlFor="email">
-              Password
-            </label>
+            <label className="block font-semibold mb-2">Password</label>
             <input
               className="border border-gray-400 p-2 w-full rounded"
-              type="text"
+              type="password"
               id="passwordField"
               name="passwordField"
             />
@@ -74,16 +73,10 @@ function PasswordView() {
               type="submit"
               className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded"
             >
-              Edit
+              Save
             </button>
           </div>
         </form>
-        <button
-          className="absolute top-0 right-0 m-4 text-xl "
-          onClick={handleCloseForm}
-        >
-          &times;
-        </button>
       </div>
     </>
   );
