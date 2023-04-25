@@ -1,4 +1,6 @@
 import models from "../../db/models";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./auth/[...nextauth]";
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
@@ -12,8 +14,13 @@ export default async function handler(req, res) {
     }
   } else if (req.method === "POST") {
     try {
-      const password = await models.password.create(req.body);
-      res.json({ success: true, password });
+      const session = await getServerSession(req, res, authOptions);
+      if (session) {
+        req.body.user_id = session?.user?.id;
+        const password = await models.password.create(req.body);
+        res.json({ success: true, password });
+      }
+      res.json({ success: false });
     } catch (error) {
       res.status(500).json({
         message: error.message,

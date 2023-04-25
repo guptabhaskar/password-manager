@@ -1,14 +1,19 @@
 import models from "../../db/models";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./auth/[...nextauth]";
+import bcrypt from "bcrypt";
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
+      const session = await getServerSession(req, res, authOptions);
       const key = await models.key.findOne({
         where: {
-          user_id: req.query.user_id,
+          user_id: session?.user?.id,
         },
       });
-      res.json({ success: true, exists: key ? true : false });
+      const match = await bcrypt.compare(req.query.password, key?.key);
+      res.json({ success: true, match });
     } catch (error) {
       res.status(500).json({
         message: error.message,
@@ -16,8 +21,13 @@ export default async function handler(req, res) {
     }
   } else if (req.method === "POST") {
     try {
-      const key = await models.key.create(req.body);
-      res.json({ success: true, key });
+      const session = await getServerSession(req, res, authOptions);
+      const hash = await bcrypt.hash(req.body.password, 10);
+      await models.key.create({
+        user_id: session?.user?.id,
+        key: hash,
+      });
+      res.json({ success: true });
     } catch (error) {
       res.status(500).json({
         message: error.message,
