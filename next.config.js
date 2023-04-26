@@ -1,5 +1,6 @@
 module.exports = {
   output: "standalone",
+  nftTracing: true,
   reactStrictMode: true,
   images: {
     domains: [
