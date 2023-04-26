@@ -3,7 +3,7 @@ import CreateMaster from "../components/CreateMaster";
 import Image from "next/image";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
-import axios from "axios";
+import models from "../db/models";
 
 export default function IndexPage({ exists = null }) {
   if (exists !== null) {
@@ -36,15 +36,14 @@ export default function IndexPage({ exists = null }) {
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
   if (session) {
-    const res = await axios.get(
-      `${process.env.NEXTAUTH_URL}/api/keyExists?userId=${session?.user?.id}`
-    );
-    const {
-      data: { exists },
-    } = res;
+    const key = await models.key.findOne({
+      where: {
+        user_id: session?.user?.id,
+      },
+    });
     return {
       props: {
-        exists,
+        exists: key ? true : false,
       },
     };
   } else {
