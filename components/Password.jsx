@@ -1,22 +1,9 @@
 import { useState } from "react";
 import { IconX, IconCheck } from "@tabler/icons-react";
-import {
-  PasswordInput,
-  Progress,
-  Text,
-  Popover,
-  Box,
-  Stack,
-} from "@mantine/core";
+import { PasswordInput, Progress, Text, Popover, Box } from "@mantine/core";
 import { requirements, getStrength } from "../utils/functions";
 
-function PasswordRequirement({
-  meets,
-  label,
-}: {
-  meets: boolean;
-  label: string;
-}) {
+function PasswordRequirement({ meets, label }) {
   return (
     <Text
       color={meets ? "teal" : "red"}
@@ -30,19 +17,7 @@ function PasswordRequirement({
   );
 }
 
-function Password({
-  value,
-  setValue,
-  label,
-  visible,
-  toggle,
-}: {
-  value: string;
-  setValue: (value: string) => void;
-  label: string;
-  visible: boolean;
-  toggle: () => void;
-}) {
+function Password({ value, setValue, label, visible, toggle }) {
   const [popoverOpened, setPopoverOpened] = useState(false);
   const checks = requirements.map((requirement, index) => (
     <PasswordRequirement

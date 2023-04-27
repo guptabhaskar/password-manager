@@ -51,9 +51,9 @@ function PasswordView() {
           className="bg-white p-4 rounded-lg shadow-md"
           style={{
             maxWidth: "600px",
-            maxHeight: "650px",
+            maxHeight: "700px",
             width: "90%",
-            height: "52%",
+            height: "55%",
           }}
           onClick={(e) => {
             // do not close modal if anything inside modal content is clicked

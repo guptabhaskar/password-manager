@@ -17,7 +17,7 @@ export const Password = sequelize.define(
       type: DataTypes.STRING,
     },
     password: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
   },
   {
