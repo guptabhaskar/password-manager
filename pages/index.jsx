@@ -3,7 +3,7 @@ import CreateMaster from "../components/CreateMaster";
 import Image from "next/image";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
-import models from "../db/models";
+import { Key } from "../models/key";
 
 export default function IndexPage({ exists = null }) {
   if (exists !== null) {
@@ -36,7 +36,7 @@ export default function IndexPage({ exists = null }) {
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
   if (session) {
-    const key = await models.key.findOne({
+    const key = await Key.findOne({
       where: {
         user_id: session?.user?.id,
       },

@@ -1,4 +1,4 @@
-import models from "../../db/models";
+import { Key } from "../../models/key";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./auth/[...nextauth]";
 import bcrypt from "bcrypt";
@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
       const session = await getServerSession(req, res, authOptions);
-      const key = await models.key.findOne({
+      const key = await Key.findOne({
         where: {
           user_id: session?.user?.id,
         },
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     try {
       const session = await getServerSession(req, res, authOptions);
       const hash = await bcrypt.hash(req.body.password, 10);
-      await models.key.create({
+      await Key.create({
         user_id: session?.user?.id,
         key: hash,
       });
