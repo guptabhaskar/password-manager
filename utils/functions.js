@@ -17,4 +17,15 @@ function getStrength(password) {
   return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
 }
 
-export { requirements, getStrength };
+function generatePassword(length) {
+  var charset =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
+  var password = "";
+  for (var i = 0; i < length; i++) {
+    var randomChar = charset.charAt(Math.floor(Math.random() * charset.length));
+    password += randomChar;
+  }
+  return password;
+}
+
+export { requirements, getStrength, generatePassword };
