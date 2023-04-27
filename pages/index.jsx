@@ -4,10 +4,20 @@ import Image from "next/image";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { Key } from "../models/key";
+import { Password } from "../models/password";
+import CryptoJS from "crypto-js";
 
-export default function IndexPage({ exists = null }) {
+export default function IndexPage({ exists = null, passwords = [] }) {
   if (exists !== null) {
-    return <>{!exists ? <CreateMaster /> : <SavedPasswordsList />}</>;
+    return (
+      <>
+        {!exists ? (
+          <CreateMaster />
+        ) : (
+          <SavedPasswordsList passwords={passwords} />
+        )}
+      </>
+    );
   } else {
     return (
       <>
@@ -41,9 +51,24 @@ export async function getServerSideProps(context) {
         user_id: session?.user?.id,
       },
     });
+    let passwords = await Password.findAll({
+      where: {
+        user_id: session?.user?.id,
+      },
+      raw: true,
+    });
+    passwords = passwords.map((password) => {
+      const bytes = CryptoJS.AES.decrypt(password.password, key.key);
+      const decryptedPassword = bytes.toString(CryptoJS.enc.Utf8);
+      return {
+        ...password,
+        password: decryptedPassword,
+      };
+    });
     return {
       props: {
         exists: key ? true : false,
+        passwords: passwords ? passwords : [],
       },
     };
   } else {

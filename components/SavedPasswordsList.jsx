@@ -1,47 +1,88 @@
-import React from "react";
+import React, { useState } from "react";
+import { Table, Button } from "@mantine/core";
+import Image from "next/image";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import PasswordView from "./PasswordView";
+import PasswordEdit from "./PasswordEdit";
 
-function SavedPasswordList() {
-  return (
-    <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">
-      <h1 className="text-xl font-bold mb-8">Saved Passwords</h1>
-      <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center max-w-md">
-        <div className="flex items-center w-full mb-4">
-          <input
-            type="text"
-            placeholder="Enter text here"
-            className="border border-gray-400 rounded-lg p-2 w-full mr-2"
-          />
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-700 mr-2">
-            View
-          </button>
-          <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-blue-700 mr-2">
-            Edit
-          </button>
-          <button className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-blue-700">
-            Delete
-          </button>
+function SavedPasswordList({ passwords }) {
+  const router = useRouter();
+
+  const deletePassword = async (id) => {
+    await axios.delete(`/api/password?id=${id}`);
+    router.refresh();
+  };
+
+  const rows = passwords.map((password) => (
+    <tr key={password.id} className="bg-white">
+      <td>
+        <div className="text-2xl font-semibold">{password.name}</div>
+      </td>
+      <td>
+        <PasswordView password={password} />
+      </td>
+      <td>
+        <PasswordEdit password={password} />
+      </td>
+      <td>
+        <Button
+          color="red"
+          className="text-black bg-red-400 z-10"
+          radius="md"
+          size="md"
+          onClick={() => {
+            deletePassword(password.id);
+          }}
+        >
+          Delete
+        </Button>
+      </td>
+    </tr>
+  ));
+
+  if (passwords.length) {
+    return (
+      <>
+        <div className="bg-blue-50 min-h-screen flex flex-col justify-center items-center">
+          <h1 className="text-3xl font-bold mb-8">Saved Password</h1>
+          <div className="rounded-md">
+            <Table
+              verticalSpacing="md"
+              horizontalSpacing="lg"
+              withBorder
+              withColumnBorders
+              className="table-auto"
+            >
+              <tbody>{rows}</tbody>
+            </Table>
+          </div>
         </div>
-      </div>
-      <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center max-w-md">
-        <div className="flex items-center w-full mb-4">
-          <input
-            type="text"
-            placeholder="Enter text here"
-            className="border border-gray-400 rounded-lg p-2 w-full mr-2"
-          />
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-700 mr-2">
-            View
-          </button>
-          <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-blue-700 mr-2">
-            Edit
-          </button>
-          <button className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-blue-700">
-            Delete
-          </button>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <div className="flex flex-col items-center text-center text-xl h-screen bg-blue-50">
+          <div className="font-bold text-xl pt-48">
+            You do not have any saved passwords.
+          </div>
+          <div className="flex items-center justify-start">
+            <div>
+              <Image
+                alt="logo"
+                src="/logo.png"
+                width={100}
+                height={100}
+                className="m-5"
+              />
+            </div>
+            <div className="text-3xl font-semibold">SafeKeep</div>
+          </div>
         </div>
-      </div>
-    </div>
-  );
+      </>
+    );
+  }
 }
 
 export default SavedPasswordList;

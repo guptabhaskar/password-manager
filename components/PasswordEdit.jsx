@@ -3,13 +3,14 @@ import Password from "./Password";
 import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { Button } from "@mantine/core";
 
-function AddPassword() {
+function PasswordEdit({ password }) {
   const [visible, { toggle }] = useDisclosure(false);
   const name = useRef(null);
   const website = useRef(null);
   const username = useRef(null);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(password.password);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const router = useRouter();
 
@@ -21,9 +22,10 @@ function AddPassword() {
     setIsFormOpen(false);
   };
 
-  const addPassword = async (e) => {
+  const editPassword = async (e) => {
     e.preventDefault();
     const body = {
+      id: password.id,
       name: name.current.value,
       website: website.current.value,
       username: username.current.value,
@@ -35,14 +37,19 @@ function AddPassword() {
 
   return (
     <>
-      <button
-        className="bg-transparent text-blue-700 font-semibold py-2 px-4 border border-blue-500 rounded"
-        onClick={handleOpenForm}
+      <Button
+        color="blue"
+        className="text-black bg-blue-400"
+        radius="md"
+        size="md"
+        onClick={() => {
+          handleOpenForm();
+        }}
       >
-        Add Password
-      </button>
+        Edit
+      </Button>
       <div
-        className={`fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center ${
+        className={`z-20 fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center ${
           isFormOpen ? "" : "hidden"
         }`}
         onClick={handleCloseForm}
@@ -59,10 +66,10 @@ function AddPassword() {
             // do not close modal if anything inside modal content is clicked
             e.stopPropagation();
           }}
-          onSubmit={addPassword}
+          onSubmit={editPassword}
         >
           <h2 className="text-lg font-semibold mb-4 text-center">
-            Add Password
+            Edit Password
           </h2>
           <div className="mb-4">
             <label className="block font-semibold mb-2">Name</label>
@@ -70,6 +77,7 @@ function AddPassword() {
               className="border border-gray-400 p-2 w-full rounded"
               type="text"
               id="name"
+              defaultValue={password.name}
               ref={name}
             />
           </div>
@@ -79,6 +87,7 @@ function AddPassword() {
               className="border border-gray-400 p-2 w-full rounded"
               type="text"
               id="website"
+              defaultValue={password.website}
               ref={website}
             />
           </div>
@@ -88,6 +97,7 @@ function AddPassword() {
               className="border border-gray-400 p-2 w-full rounded"
               type="text"
               id="username"
+              defaultValue={password.username}
               ref={username}
             />
           </div>
@@ -114,4 +124,4 @@ function AddPassword() {
   );
 }
 
-export default AddPassword;
+export default PasswordEdit;
