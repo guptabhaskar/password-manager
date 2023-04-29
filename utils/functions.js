@@ -19,7 +19,7 @@ function getStrength(password) {
 
 function generatePassword(length) {
   var charset =
-    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345678901234567890123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
   var password = "";
   for (var i = 0; i < length; i++) {
     var randomChar = charset.charAt(Math.floor(Math.random() * charset.length));
